@@ -1,0 +1,104 @@
+<div class="container">
+  <div class="user-info">
+    <svg
+      (click)="back()"
+      version="1.1"
+      id="Layer_1"
+      xmlns="http://www.w3.org/2000/svg"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      x="0px"
+      y="0px"
+      viewBox="0 0 66.91 122.88"
+      style="enable-background: new 0 0 66.91 122.88"
+      xml:space="preserve"
+      width="10px"
+    >
+      <g>
+        <path
+          fill="rgb(161, 202, 252)"
+          d="M64.96,111.2c2.65,2.73,2.59,7.08-0.13,9.73c-2.73,2.65-7.08,2.59-9.73-0.14L1.97,66.01l4.93-4.8l-4.95,4.8 c-2.65-2.74-2.59-7.1,0.15-9.76c0.08-0.08,0.16-0.15,0.24-0.22L55.1,2.09c2.65-2.73,7-2.79,9.73-0.14 c2.73,2.65,2.78,7.01,0.13,9.73L16.5,61.23L64.96,111.2L64.96,111.2L64.96,111.2z"
+        />
+      </g>
+    </svg>
+    <span class="active" *ngIf="activeUsers[sendTo['_id']]"></span>
+    <span class="icon" [style.backgroundColor]="sendTo.bgColor">{{
+      sendTo.email.substring(0, 1) | uppercase
+    }}</span>
+    <h2>{{ sendTo.email }}</h2>
+  </div>
+  <div class="messages" #messageContainer>
+    <div
+      *ngFor="let item of messagesData.messages"
+      class="msg-item {{ item.fromMe ? 'me' : 'ot' }}"
+    >
+      <ng-container>
+        <span *ngIf="!item.fromMe">{{ item.message }}</span>
+        <span *ngIf="item.fromMe">{{ item.message }}</span>
+      </ng-container>
+    </div>
+  </div>
+
+  <div class="msg-container">
+    <input
+      class="input"
+      type="text"
+      [(ngModel)]="messageValue"
+      placeholder="Type..."
+      (keydown.enter)="sendMessage()"
+    />
+    <button class="emoji-btn" (click)="showEmojiPicker = !showEmojiPicker">
+      😀
+    </button>
+    <emoji-mart
+      [showPreview]="false"
+      [enableSearch]="false"
+      [style]="{ position: 'absolute', bottom: '60px', right: '20px' }"
+      (emojiClick)="handleEmojiSelect($event)"
+      *ngIf="showEmojiPicker"
+    ></emoji-mart>
+
+    <svg
+      (click)="sendMessage()"
+      class="send__icon"
+      xmlns="http://www.w3.org/2000/svg"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      version="1.1"
+      width="30"
+      height="30"
+      viewBox="0 0 256 256"
+      xml:space="preserve"
+    >
+      <defs></defs>
+      <g
+        style="
+          stroke: none;
+          stroke-width: 0;
+          stroke-dasharray: none;
+          stroke-linecap: butt;
+          stroke-linejoin: miter;
+          stroke-miterlimit: 10;
+          fill: none;
+          fill-rule: nonzero;
+          opacity: 1;
+        "
+        transform="translate(1.4065934065934016 1.4065934065934016) scale(2.81 2.81)"
+      >
+        <polygon
+          points="0,14.69 0,39.65 51,45 0,50.35 0,75.31 90,45 "
+          style="
+            stroke: none;
+            stroke-width: 1;
+            stroke-dasharray: none;
+            stroke-linecap: butt;
+            stroke-linejoin: miter;
+            stroke-miterlimit: 10;
+            fill: white;
+            fill-rule: nonzero;
+            opacity: 1;
+          "
+          transform="  matrix(1 0 0 1 0 0) "
+        />
+      </g>
+    </svg>
+  </div>
+</div>

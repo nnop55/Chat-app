@@ -1,0 +1,19 @@
+<div class="container">
+  <app-loading *ngIf="isLoading"></app-loading>
+
+  <div class="over" [class.loading]="isLoading">
+    <ng-container *ngIf="content == 'list'">
+      <app-list (actionEmitter)="handleListAction($event)"></app-list>
+    </ng-container>
+    <ng-container *ngIf="content == 'messages'">
+      <app-send-message
+        [sendTo]="sendTo"
+        [messagesData]="messagesData"
+        (emitClick)="handleListAction($event)"
+      ></app-send-message>
+    </ng-container>
+    <ng-container *ngIf="content == 'auth'">
+      <app-authorization (logIn)="content = $event"></app-authorization>
+    </ng-container>
+  </div>
+</div>

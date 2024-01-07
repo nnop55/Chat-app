@@ -1,0 +1,21 @@
+<div class="container">
+  <section *ngIf="step == 1">
+    <h2>Enter E-mail for sent verify code</h2>
+    <input [(ngModel)]="email" class="input" placeholder="E-mail" />
+    <div class="error-msg" *ngIf="errorMsg">{{ errTxt || "Fill input!" }}</div>
+  </section>
+  <section *ngIf="step == 2">
+    <h2>Enter verify code</h2>
+    <input [(ngModel)]="verify" class="input" placeholder="Verify code" />
+    <div class="error-msg" *ngIf="errorMsg">
+      {{ errTxt || "Fill input!" }}
+    </div>
+  </section>
+
+  <div class="btn-cont">
+    <button *ngIf="step == 2" (click)="step = 1">Back</button>
+    <button (click)="btnClick(step)">
+      {{ step == 1 ? "Next" : "Log in" }}
+    </button>
+  </div>
+</div>

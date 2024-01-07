@@ -1,0 +1,19 @@
+<div class="container">
+  <div class="btn">
+    <button (click)="logOut()">Log out</button>
+  </div>
+  <div class="list">
+    <div
+      class="item"
+      *ngFor="let item of usersData"
+      (click)="openChat(item)"
+      [class.disabled]="!activeUsers[item._id]"
+    >
+      <span class="active" *ngIf="activeUsers[item._id]"></span>
+      <span class="icon" [style.backgroundColor]="item.bgColor">{{
+        item.email.substring(0, 1) | uppercase
+      }}</span>
+      {{ item.email }}
+    </div>
+  </div>
+</div>
