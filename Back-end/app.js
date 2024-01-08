@@ -16,7 +16,10 @@ class App{
     ep = new Endpoints();
 
     constructor() {
-        this.app.options('*', cors());
+        this.app.use(cors({ 
+          origin: '*',
+          credentials:true
+         }));
         this.app.use(bodyParser.json());
         this.app.use(bodyParser.urlencoded({ extended: true }));
     
