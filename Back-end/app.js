@@ -18,6 +18,10 @@ class App{
     constructor() {
         this.app.use(cors({ 
           origin: '*',
+          methods: [
+            'GET',
+            'POST',
+          ],
           allowedHeaders: [
             'Content-Type',
           ],
