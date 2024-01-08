@@ -1,3 +1,3 @@
 export const environment = {
-    apiEndpoint: 'http://localhost:5000/',
+    apiEndpoint: 'https://chat-app-one-lilac.vercel.app/',
 };
