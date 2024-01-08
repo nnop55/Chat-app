@@ -30,7 +30,7 @@ class App{
     
         this.httpServer.listen(() => {
           this.db.connectDb();
-          console.log(`HTTP Server started on port ${PORT}`);
+          console.log(`HTTP Server started on port}`);
         });
     
         this.s.ioAttach(this.httpServer);
