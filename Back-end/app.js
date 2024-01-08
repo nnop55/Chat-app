@@ -28,7 +28,7 @@ class App{
     
         const PORT = process.env.PORT || 5000;
     
-        this.httpServer.listen(PORT, () => {
+        this.httpServer.listen(() => {
           this.db.connectDb();
           console.log(`HTTP Server started on port ${PORT}`);
         });
