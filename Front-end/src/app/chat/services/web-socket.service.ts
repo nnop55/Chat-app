@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Socket, io } from 'socket.io-client';
 import { SharedService } from './shared.service';
-import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +12,7 @@ export class WebSocketService {
   public activeUsers: any = new Object()
 
   constructor(private shared: SharedService) {
-    this.socket = io(environment.apiEndpoint);
+    this.socket = io('http://localhost:5000');
   }
 
   private setupSocketListeners(): void {
