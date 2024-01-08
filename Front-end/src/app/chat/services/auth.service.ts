@@ -24,7 +24,7 @@ export class AuthService {
   }
 
   authorization(email: any): Observable<any> {
-    return this.http.post<any>(`${this.baseUrl}send-verification`, { email })
+    return this.http.post<any>(`${this.baseUrl}v2/send-verification`, { email })
   }
 
   verify(params: any): Observable<any> {
