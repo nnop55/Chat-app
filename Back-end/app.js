@@ -17,8 +17,7 @@ class App{
 
     constructor() {
         this.app.use(cors({ 
-          origin: '*',
-          credentials:true
+          origin: '*'
          }));
         this.app.use(bodyParser.json());
         this.app.use(bodyParser.urlencoded({ extended: true }));
