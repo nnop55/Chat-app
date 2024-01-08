@@ -24,7 +24,4 @@ export class ApiService {
     return this.http.post<any>(`${this.baseUrl}chat-data`, params)
   }
 
-  // getMessagesById(id: string): Observable<any> {
-  //   return this.http.get<any>(`${this.baseUrl}?_id=${id}`)
-  // }
 }
