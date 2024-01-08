@@ -17,13 +17,9 @@ class App{
 
     constructor() {
       this.app.use(cors({
-        origin: '*',
-        methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-        preflightContinue: false,
-        optionsSuccessStatus: 204,
-        allowedHeaders: '*',
+        origin: ['https://chat-app-tornike-melikishvili.vercel.app'],
+        methods: ['GET,POST'],
         credentials: true,
-        maxAge: 3600,
       }));
         this.app.use(bodyParser.json());
         this.app.use(bodyParser.urlencoded({ extended: true }));
