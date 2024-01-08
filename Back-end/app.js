@@ -16,9 +16,15 @@ class App{
     ep = new Endpoints();
 
     constructor() {
-        this.app.use(cors({ 
-          origin: '*'
-         }));
+      this.app.use(cors({
+        origin: '*',
+        methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+        preflightContinue: false,
+        optionsSuccessStatus: 204,
+        allowedHeaders: '*',
+        credentials: true,
+        maxAge: 3600,
+      }));
         this.app.use(bodyParser.json());
         this.app.use(bodyParser.urlencoded({ extended: true }));
     
