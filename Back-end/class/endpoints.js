@@ -2,11 +2,13 @@ import { ObjectId } from "mongodb";
 import {Database} from "./database.js";
 import { MailService } from "./mail-service.js";
 import { pickColor } from "./pick-color.js";
+import { Helper } from "./helper.js";
 
 export class Endpoints{
     userData = new Object();
     db = new Database();
     ms = new MailService()
+    h = new Helper();
 
     constructor(){}
 
@@ -14,7 +16,7 @@ export class Endpoints{
 
     const { email } = req.body;
     const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
-    const user = { email:email, code: verificationCode, isActive: false, bgColor: pickColor() };
+    const user = { email:email, code: verificationCode, isActive: false, bgColor: pickColor(),isFirstSign:true };
     const userCollection = this.db.usersCol();
     const userExist = await userCollection.findOne({ email:email });
     
@@ -29,7 +31,6 @@ export class Endpoints{
     }
 
     this.ms.sentMail(email,verificationCode,res)
-    
 }
 
 async verification(req,res){
@@ -50,6 +51,7 @@ async verification(req,res){
     res.status(200).json({status:"Ok", message: 'Verification code is valid' });
 
     await userCollection.updateOne({ _id: verification._id }, { $set: { code: null }});
+    this.h.setUserProperty(email, {isFirstSign: false})
 }
 
 async logOut(req,res){
@@ -112,24 +114,6 @@ async chatData(req,res){
     return res.status(200).json({status:"Ok", data:{chatId:isChat['_id'],messages:(isChat.messagesData ? messagesNew : [])}})
 }
 
-async userActiveOrNot(id, active){
-    const userCollection = this.db.usersCol();
-    const objId = new ObjectId(id)
-    await userCollection.updateOne({ _id: objId}, { $set: { isActive: active }}); 
-}
-
-async updateMessagesInDb(data){
-    const messages = this.db.messagesCol();
-    const objId = new ObjectId(data['chatId'])
-    const chat = await messages.findOne({ _id: objId })
-
-    if(!chat.messagesData){
-        chat.messagesData = []
-    }
-
-    chat.messagesData.push({user:data['senderId'], message:data['message']})
-    await messages.updateOne({ _id: objId }, { $set: { messagesData: chat.messagesData }});
-}
 
 }
 // function (err,data)  {

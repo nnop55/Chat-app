@@ -1,4 +1,7 @@
 import {MongoClient} from 'mongodb'
+import { config } from 'dotenv';
+
+config();
 
 export class Database{
     client;
@@ -8,7 +11,7 @@ export class Database{
     }
 
     async connectDb() {
-        const uri = "mongodb://localhost:27017";
+        const uri = process.env.DATABASE_URL;
         this.client = new MongoClient(uri);
         try {
             await this.client.connect();

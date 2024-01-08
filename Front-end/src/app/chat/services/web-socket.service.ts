@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Socket, io } from 'socket.io-client';
+import { SharedService } from './shared.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,7 @@ export class WebSocketService {
   private socket!: Socket;
   public activeUsers: any = new Object()
 
-  constructor() {
+  constructor(private shared: SharedService) {
     this.socket = io('http://localhost:5000');
   }
 
@@ -20,8 +21,9 @@ export class WebSocketService {
       console.log('Connected to WebSocket server');
     });
 
-    this.socket.on('updateActiveUsers', (userIds) => {
+    this.socket.on('updateActiveUsers', (userIds, newUser) => {
       this.activeUsers = userIds
+      newUser && this.shared.updateUsersState(newUser)
     });
 
 

@@ -1,4 +1,7 @@
 import nodemailer from "nodemailer"
+import { config } from 'dotenv';
+
+config();
 
 export class MailService{
 
@@ -6,7 +9,7 @@ export class MailService{
         service: 'gmail',
         auth: {
             user: 'appchat194@gmail.com',
-            pass: 'fyms axkl nfhn xhfi'
+            pass: process.env.NODE_MAILER_PASS
         }
     });
 

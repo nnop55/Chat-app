@@ -1,9 +1,11 @@
 import {Endpoints} from "./endpoints.js"
 import {Server} from "socket.io"
 import {createServer} from "http"
+import { Helper } from "./helper.js"
 
 export class Socket{
   ep = new Endpoints()
+  h = new Helper()
   userSocketMap = {};
   connectedUsers = {};
   server = createServer();
@@ -23,14 +25,15 @@ export class Socket{
         this.userSocketMap[userId] = socket.id;
         
         this.connectedUsers[userId] = true
-        this.io.emit('updateActiveUsers', this.connectedUsers);
-        await this.ep.userActiveOrNot(userId, true);
+        this.io.emit('updateActiveUsers', this.connectedUsers,await this.h.findUser(userId));
+
+        await this.h.userActiveOrNot(userId, true);
       });
 
       socket.on('userInactive',async (userId) => {
         delete this.connectedUsers[userId]
         this.io.emit('updateActiveUsers', this.connectedUsers);
-        await this.ep.userActiveOrNot(userId, false);
+        await this.h.userActiveOrNot(userId, false);
 
       });
 
@@ -40,7 +43,7 @@ export class Socket{
         
         if (receiverSocketId) {
           this.io.to(receiverSocketId).emit('receiveMessage', { userId:senderId, message,fromMe:false });
-          this.ep.updateMessagesInDb(data)
+          this.h.updateMessagesInDb(data)
         } else {
           console.log('Receiver socket not found');
         }

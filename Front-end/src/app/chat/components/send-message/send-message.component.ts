@@ -47,6 +47,7 @@ export class SendMessageComponent {
     let fromUser = sessionStorage.getItem("userId")
     if (fromUser) {
       this.webSocket.sendMessage(this.sendTo['chatId'], fromUser, this.sendTo['_id'], this.messageValue);
+      if (!this.messagesData['messages']) this.messagesData['messages'] = []
       this.messagesData['messages'].push({ userId: fromUser, message: this.messageValue, fromMe: true })
       this.showEmojiPicker = false
       this.scrollToBottom()

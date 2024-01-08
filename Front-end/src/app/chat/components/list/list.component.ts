@@ -4,6 +4,7 @@ import { ApiService } from '../../services/api.service';
 import { delay } from 'rxjs';
 import { LoadingService } from '../../services/loading.service';
 import { WebSocketService } from '../../services/web-socket.service';
+import { SharedService } from '../../services/shared.service';
 
 @Component({
   selector: 'app-list',
@@ -18,6 +19,7 @@ export class ListComponent implements OnInit {
   api = inject(ApiService)
   loadingService = inject(LoadingService)
   socket = inject(WebSocketService)
+  shared = inject(SharedService)
 
   usersData: any[] = []
   userId!: string
@@ -28,11 +30,19 @@ export class ListComponent implements OnInit {
       .subscribe(userId => {
         if (userId) {
           this.userId = userId
-
           this.getAllUsers()
         }
       })
 
+    this.shared.updateUsers$.subscribe((user) => {
+      if (user) {
+        this.loadingService.setLoadingState(true)
+        this.usersData.push(user)
+        setTimeout(() => {
+          this.loadingService.setLoadingState(false)
+        }, 500)
+      }
+    })
   }
 
 

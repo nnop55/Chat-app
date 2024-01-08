@@ -40,9 +40,9 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   listener() {
     this.webSocket.receiveMessage().subscribe((data: any) => {
+      if (!this.messagesData['messages']) this.messagesData['messages'] = []
       this.messagesData['messages'].push(data)
       this.shared.setScrollState('clicked')
-      console.log("receive", this.messagesData)
     });
 
     let userActive = sessionStorage.getItem("userId")
