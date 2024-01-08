@@ -26,11 +26,11 @@ class App{
     
         this.setupRoutes();
     
-        const PORT = process.env.PORT || 5000;
+        // const PORT = process.env.PORT || 5000;
     
         this.httpServer.listen(() => {
           this.db.connectDb();
-          console.log(`HTTP Server started on port}`);
+          console.log(`HTTP Server started`);
         });
     
         this.s.ioAttach(this.httpServer);
