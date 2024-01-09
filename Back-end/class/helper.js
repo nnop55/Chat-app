@@ -31,6 +31,7 @@ export class Helper{
 
         chat.messagesData.push({user:data['senderId'], message:data['message']})
         await messages.updateOne({ _id: objId }, { $set: { messagesData: chat.messagesData }});
+        // return chat
     }
 
     async setUserProperty(email,row){

@@ -37,7 +37,8 @@ export class ListComponent implements OnInit {
     this.shared.updateUsers$.subscribe((user) => {
       if (user) {
         this.loadingService.setLoadingState(true)
-        this.usersData.push(user)
+        let check = this.usersData.find(x => x['_id'] === user['_id'])
+        if (!check) this.usersData.push(user)
         setTimeout(() => {
           this.loadingService.setLoadingState(false)
         }, 500)
@@ -64,12 +65,14 @@ export class ListComponent implements OnInit {
   }
 
   openChat(user: any) {
+    this.loadingService.setLoadingState(true)
     const postData = {
       firstUser: user['_id'],
       secondUser: this.userId
     }
     this.api.getChatData(postData).subscribe((res) => {
       this.actionEmitter.emit({ user, content: "messages", chatData: res.data })
+      this.loadingService.setLoadingState(false)
     })
   }
 

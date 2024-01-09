@@ -60,21 +60,13 @@ export class WebSocketService {
     this.socket.emit('sendMessage', { chatId, senderId, receiverId, message });
   }
 
-  public userTyping(senderId: string | null, receiverId: string) {
-    this.socket.emit("messageTyping", { senderId, receiverId })
+  public userTyping(chatId: string | null, receiverId: string, msg: string) {
+    this.socket.emit("messageTyping", { chatId, receiverId, msg })
   }
 
-  public handleTyping(): Observable<any> {
+  public handleSocketObserver(event: string): Observable<any> {
     return new Observable(observer => {
-      this.socket.on('messageTyping', (data: any) => {
-        observer.next(data);
-      });
-    });
-  }
-
-  public receiveMessage(): Observable<any> {
-    return new Observable(observer => {
-      this.socket.on('receiveMessage', (data: any) => {
+      this.socket.on(event, (data: any) => {
         observer.next(data);
       });
     });

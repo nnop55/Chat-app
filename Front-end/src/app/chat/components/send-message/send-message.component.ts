@@ -30,13 +30,11 @@ export class SendMessageComponent {
       ev == 'clicked' && this.scrollToBottom()
     })
 
-    this.messageControl.valueChanges.subscribe(msg => {
-      if (msg != '') {
-        this.webSocket.userTyping(this.fromUser, this.sendTo['_id'])
-      }
+    this.messageControl.valueChanges.subscribe((msg: any) => {
+      this.webSocket.userTyping(this.messagesData['chatId'], this.sendTo['_id'], msg)
     })
 
-    this.webSocket.handleTyping().subscribe((data) => {
+    this.webSocket.handleSocketObserver('messageTyping').subscribe((data) => {
       this.isTyping = data['typing']
       this.scrollToBottom();
     })
@@ -69,6 +67,8 @@ export class SendMessageComponent {
       this.webSocket.sendMessage(this.sendTo['chatId'], this.fromUser, this.sendTo['_id'], this.messageControl?.value);
       if (!this.messagesData['messages']) this.messagesData['messages'] = []
       this.messagesData['messages'].push({ userId: this.fromUser, message: this.messageControl?.value, fromMe: true })
+      console.log("ASDSAD", this.messagesData)
+
       this.showEmojiPicker = false
       this.scrollToBottom()
     }

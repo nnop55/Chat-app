@@ -9,7 +9,7 @@ export class SharedService {
   private scrollSubject = new BehaviorSubject<string>('');
   scroll$ = this.scrollSubject.asObservable();
 
-  private updateUsersSubject = new Subject<{}>();
+  private updateUsersSubject = new Subject<any>();
   updateUsers$ = this.updateUsersSubject.asObservable();
 
   constructor() { }
@@ -18,7 +18,8 @@ export class SharedService {
     this.scrollSubject.next(ev);
   }
 
-  updateUsersState(ev: {}): void {
+  updateUsersState(ev: any): void {
     this.updateUsersSubject.next(ev);
   }
+
 }
