@@ -11,5 +11,9 @@
             "src": "/(.*)",
             "dest": "/"
         }
-    ]
+    ],
+    "env": {
+        "API_ENDPOINT": "https://chat-app-api-eight.vercel.app/",
+        "SOCKET_URL": "https://chat-app-api-eight.vercel.app"
+      }
 }
