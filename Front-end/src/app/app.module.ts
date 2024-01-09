@@ -13,7 +13,6 @@ import { LogOutInterceptor } from './interceptor/log-out.interceptor';
 import { ListComponent } from './chat/components/list/list.component';
 import { LoadingComponent } from './chat/components/loading/loading.component';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
-import { TokenInterceptor } from './interceptor/token.interceptor';
 
 @NgModule({
   declarations: [
@@ -41,12 +40,7 @@ import { TokenInterceptor } from './interceptor/token.interceptor';
       provide: HTTP_INTERCEPTORS,
       useClass: LogOutInterceptor,
       multi: true
-    },
-    // {
-    //   provide: HTTP_INTERCEPTORS,
-    //   useClass: TokenInterceptor,
-    //   multi: true,
-    // },
+    }
   ],
   bootstrap: [AppComponent]
 })

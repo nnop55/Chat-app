@@ -16,11 +16,11 @@ class App{
     ep = new Endpoints();
 
     constructor() {
-      this.app.use(cors({
-        origin: ['https://chat-app-tornike-melikishvili.vercel.app'],
-        methods: ['GET,POST'],
-        credentials: true,
-      }));
+        this.app.use(cors({
+          origin: ['https://chat-app-tornike-melikishvili.vercel.app'],
+          methods: ['GET,POST'],
+          credentials: true,
+        }));
         this.app.use(bodyParser.json());
         this.app.use(bodyParser.urlencoded({ extended: true }));
     

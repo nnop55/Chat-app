@@ -13,7 +13,9 @@ export class WebSocketService {
   public activeUsers: any = new Object()
 
   constructor(private shared: SharedService) {
-    this.socket = io(environment.socketUrl);
+    this.socket = io(environment.socketUrl, {
+      withCredentials: true,
+    });
   }
 
   private setupSocketListeners(): void {
