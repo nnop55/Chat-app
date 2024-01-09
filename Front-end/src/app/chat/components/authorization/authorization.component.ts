@@ -1,6 +1,8 @@
 import { Component, EventEmitter, HostListener, Output, inject } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { LoadingService } from '../../services/loading.service';
+import { FormControl, Validators } from '@angular/forms';
+import { StepMode } from '../../unions';
 
 @Component({
   selector: 'app-authorization',
@@ -15,44 +17,43 @@ export class AuthorizationComponent {
   loadingService = inject(LoadingService)
 
   step: number = 1;
-  email!: string;
-  verify!: string;
+  emailFormControl = new FormControl('', [Validators.required, Validators.email]);
+  verifyFormControl = new FormControl('', [Validators.required]);
   errorMsg: boolean = false;
   errTxt!: string;
+  stepMode = StepMode
 
   @HostListener('document:keydown', ['$event'])
   onEnterPress(event: KeyboardEvent) {
     if (event.key == 'Enter') {
-      this.btnClick(this.step)
+      this.btnClick()
     }
 
   }
 
   sendVerification() {
     this.loadingService.setLoadingState(true)
-    this.api.authorization(this.email).subscribe((res) => {
+    this.api.authorization(this.emailFormControl?.value).subscribe((res) => {
       this.loadingService.setLoadingState(false)
       if (res['status'] == "Already") {
         this.errorMsg = true
         return this.errTxt = res['message']
       }
-      this.step = 2
+      this.step = this.stepMode.verify
       this.errorMsg = false
     })
   }
 
   checkVerify() {
     this.loadingService.setLoadingState(true)
-    this.api.verify({ code: this.verify, email: this.email }).subscribe({
+    this.api.verify({ code: this.verifyFormControl?.value, email: this.emailFormControl?.value }).subscribe({
       next: (res) => {
         this.loadingService.setLoadingState(false)
         if (res['status'] == "Already") {
           this.errorMsg = true
           return this.errTxt = res['message']
         }
-        this.verify = '';
-        this.email = ''
-        this.step = 1;
+        this.step = this.stepMode.email;
         this.errorMsg = false
         this.logIn.emit("list")
 
@@ -66,21 +67,13 @@ export class AuthorizationComponent {
     )
   }
 
-  btnClick(mode: number) {
-    if (mode == 1) {
-      if (!this.email || this.email == '') {
-        this.errorMsg = true;
-        return;
-      }
-      this.sendVerification();
+  btnClick() {
+    this.step == this.stepMode.email ?
+      (this.sendVerification()) : (this.checkVerify())
+  }
 
-    } else {
-      if (!this.verify || this.verify == '') {
-        this.errorMsg = true;
-        return;
-      }
-      this.checkVerify();
-    }
-
+  disableBtn() {
+    return this.step == this.stepMode.email ?
+      (this.emailFormControl.invalid) : (this.verifyFormControl.invalid)
   }
 }

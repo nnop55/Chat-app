@@ -1,21 +1,42 @@
 <div class="container">
-  <section *ngIf="step == 1">
+  <section *ngIf="step == stepMode.email">
     <h2>Enter E-mail for sent verify code</h2>
-    <input [(ngModel)]="email" class="input" placeholder="E-mail" />
-    <div class="error-msg" *ngIf="errorMsg">{{ errTxt || "Fill input!" }}</div>
+    <input
+      [formControl]="emailFormControl"
+      class="input"
+      placeholder="E-mail"
+    />
+    <div *ngIf="emailFormControl.dirty" class="error-msg">
+      <ng-container *ngIf="emailFormControl.hasError('email')">
+        Enter valid email!
+      </ng-container>
+      <ng-container *ngIf="errorMsg">
+        {{ errTxt }}
+      </ng-container>
+    </div>
   </section>
-  <section *ngIf="step == 2">
+  <section *ngIf="step == stepMode.verify">
     <h2>Enter verify code</h2>
-    <input [(ngModel)]="verify" class="input" placeholder="Verify code" />
-    <div class="error-msg" *ngIf="errorMsg">
-      {{ errTxt || "Fill input!" }}
+    <input
+      [formControl]="verifyFormControl"
+      class="input"
+      placeholder="Verify code"
+      maxlength="6"
+      minlength="6"
+    />
+    <div *ngIf="emailFormControl.dirty" class="error-msg">
+      <ng-container *ngIf="errorMsg">
+        {{ errTxt }}
+      </ng-container>
     </div>
   </section>
 
   <div class="btn-cont">
-    <button *ngIf="step == 2" (click)="step = 1">Back</button>
-    <button (click)="btnClick(step)">
-      {{ step == 1 ? "Next" : "Log in" }}
+    <button *ngIf="step == stepMode.verify" (click)="step = stepMode.email">
+      Back
+    </button>
+    <button (click)="btnClick()" [disabled]="disableBtn()">
+      {{ step == stepMode.email ? "Next" : "Log in" }}
     </button>
   </div>
 </div>

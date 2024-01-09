@@ -1,6 +1,7 @@
 import { Component, ElementRef, EventEmitter, Input, Output, ViewChild, inject } from '@angular/core';
 import { WebSocketService } from '../../services/web-socket.service';
 import { SharedService } from '../../services/shared.service';
+import { FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-send-message',
@@ -11,24 +12,40 @@ export class SendMessageComponent {
 
   @ViewChild('messageContainer') messageContainer!: ElementRef;
 
-  messageValue: string = '';
+  messageControl = new FormControl('', [Validators.required]);
   showEmojiPicker: boolean = false
   webSocket = inject(WebSocketService);
   shared = inject(SharedService);
+  fromUser!: string | null
+  isTyping: boolean = false
 
   @Input() sendTo: any;
   @Input() messagesData: any = new Object()
   @Output() emitClick: EventEmitter<any> = new EventEmitter<any>()
 
   ngOnInit(): void {
+    this.fromUser = sessionStorage.getItem("userId")
     this.scrollToBottom();
     this.shared.scroll$.subscribe((ev: any) => {
       ev == 'clicked' && this.scrollToBottom()
     })
+
+    this.messageControl.valueChanges.subscribe(msg => {
+      if (msg != '') {
+        this.webSocket.userTyping(this.fromUser, this.sendTo['_id'])
+      }
+    })
+
+    this.webSocket.handleTyping().subscribe((data) => {
+      this.isTyping = data['typing']
+      this.scrollToBottom();
+    })
+
   }
 
   handleEmojiSelect(event: any): void {
-    this.messageValue += event.emoji.native;
+    const currMsg = this.messageControl?.value
+    this.messageControl?.setValue(currMsg + event.emoji.native)
   }
 
   get activeUsers() {
@@ -44,16 +61,19 @@ export class SendMessageComponent {
   }
 
   sendMessage() {
-    let fromUser = sessionStorage.getItem("userId")
-    if (fromUser) {
-      this.webSocket.sendMessage(this.sendTo['chatId'], fromUser, this.sendTo['_id'], this.messageValue);
+    if (this.messageControl.invalid) {
+      return
+    }
+
+    if (this.fromUser) {
+      this.webSocket.sendMessage(this.sendTo['chatId'], this.fromUser, this.sendTo['_id'], this.messageControl?.value);
       if (!this.messagesData['messages']) this.messagesData['messages'] = []
-      this.messagesData['messages'].push({ userId: fromUser, message: this.messageValue, fromMe: true })
+      this.messagesData['messages'].push({ userId: this.fromUser, message: this.messageControl?.value, fromMe: true })
       this.showEmojiPicker = false
       this.scrollToBottom()
     }
 
-    this.messageValue = '';
+    this.messageControl.setValue('');
   }
 
   back() {

@@ -28,12 +28,20 @@
   </div>
   <div class="messages" #messageContainer>
     <div
-      *ngFor="let item of messagesData.messages"
+      *ngFor="let item of messagesData.messages; let i = index"
       class="msg-item {{ item.fromMe ? 'me' : 'ot' }}"
     >
       <ng-container>
         <span *ngIf="!item.fromMe">{{ item.message }}</span>
         <span *ngIf="item.fromMe">{{ item.message }}</span>
+
+        <ng-container *ngIf="isTyping && i == messagesData.messages.length - 1">
+          <div class="load-row">
+            <span class="ball" [style.background]="sendTo.bgColor"></span>
+            <span class="ball" [style.background]="sendTo.bgColor"></span>
+            <span class="ball" [style.background]="sendTo.bgColor"></span>
+          </div>
+        </ng-container>
       </ng-container>
     </div>
   </div>
@@ -42,7 +50,7 @@
     <input
       class="input"
       type="text"
-      [(ngModel)]="messageValue"
+      [formControl]="messageControl"
       placeholder="Type..."
       (keydown.enter)="sendMessage()"
     />

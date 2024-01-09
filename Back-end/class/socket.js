@@ -43,12 +43,22 @@ export class Socket{
 
       });
 
+      socket.on('messageTyping', async (data) => {
+        const {senderId, receiverId } = data;
+        const receiverSocketId = this.userSocketMap[receiverId];
+
+        if (receiverSocketId) {
+          this.io.to(receiverSocketId).emit('messageTyping', { typing:true });
+        }
+      })
+
       socket.on('sendMessage',async (data)=>{
         const {chatId ,senderId, receiverId, message } = data;
         const receiverSocketId = this.userSocketMap[receiverId];
         
         if (receiverSocketId) {
           this.io.to(receiverSocketId).emit('receiveMessage', { userId:senderId, message,fromMe:false });
+          this.io.to(receiverSocketId).emit('messageTyping', { typing:false });
           this.h.updateMessagesInDb(data)
         } else {
           console.log('Receiver socket not found');

@@ -28,8 +28,6 @@ export class WebSocketService {
       this.activeUsers = userIds
       newUser && this.shared.updateUsersState(newUser)
     });
-
-
   }
 
   public onLoad(id: any) {
@@ -58,8 +56,20 @@ export class WebSocketService {
     this.socket.connect()
   }
 
-  public sendMessage(chatId: string, senderId: string, receiverId: string, message: string): void {
+  public sendMessage(chatId: string, senderId: string, receiverId: string, message: string | null): void {
     this.socket.emit('sendMessage', { chatId, senderId, receiverId, message });
+  }
+
+  public userTyping(senderId: string | null, receiverId: string) {
+    this.socket.emit("messageTyping", { senderId, receiverId })
+  }
+
+  public handleTyping(): Observable<any> {
+    return new Observable(observer => {
+      this.socket.on('messageTyping', (data: any) => {
+        observer.next(data);
+      });
+    });
   }
 
   public receiveMessage(): Observable<any> {

@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ChatComponent } from './chat/chat.component';
 import { SendMessageComponent } from './chat/components/send-message/send-message.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthorizationComponent } from './chat/components/authorization/authorization.component';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http'
 import { VerificationInterceptor } from './interceptor/verification.interceptor';
@@ -28,7 +28,8 @@ import { PickerComponent } from '@ctrl/ngx-emoji-mart';
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
-    PickerComponent
+    PickerComponent,
+    ReactiveFormsModule
   ],
   providers: [
     {

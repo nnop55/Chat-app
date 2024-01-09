@@ -60,6 +60,10 @@
     color: #fff;
     font-weight: 600;
     width: 40%;
+    &:disabled {
+      opacity: 0.7;
+      cursor: initial;
+    }
   }
 
   button:hover {
