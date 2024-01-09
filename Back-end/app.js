@@ -28,9 +28,9 @@ class App{
     
         this.setupRoutes();
     
-        // const PORT = process.env.PORT || 5000;
+        const PORT = process.env.PORT || 5000;
     
-        this.httpServer.listen(() => {
+        this.httpServer.listen(PORT,() => {
           this.db.connectDb();
           console.log(`HTTP Server started`);
         });
