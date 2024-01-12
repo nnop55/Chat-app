@@ -78,8 +78,11 @@ export class ListComponent implements OnInit {
   }
 
   logOut() {
+    let id: any = sessionStorage.getItem('userId')
     this.auth.logOut(this.userId).subscribe((res) => {
       this.actionEmitter.emit({ content: "auth" })
+      this.socket.emitUserInactive(id)
+      this.socket.closeConnection();
     })
   }
 }
