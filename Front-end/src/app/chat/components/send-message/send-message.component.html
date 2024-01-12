@@ -39,7 +39,8 @@
             *ngIf="
               isTyping &&
               i == messagesData.messages.length - 1 &&
-              item.userId != fromUser
+              item.userId != fromUser &&
+              !item.fromMe
             "
           >
             <div class="load-row">
