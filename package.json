@@ -5,9 +5,9 @@
         "node":">=18 <19"
     },
     "scripts":{
-        "start": "cd Back-end && node app.js",
-        "prebuild": "cd Back-end && npm run build",
-        "build": "cd Front-end && npm run build"
+        "start": "./Back-end && node app.js",
+        "prebuild": "./Back-end && npm run build",
+        "build": "./Front-end && npm run build"
     }
 
 }
