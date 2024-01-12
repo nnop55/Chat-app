@@ -73,6 +73,7 @@ export class ListComponent implements OnInit {
     this.api.getChatData(postData).subscribe((res) => {
       this.actionEmitter.emit({ user, content: "messages", chatData: res.data })
       this.loadingService.setLoadingState(false)
+      this.socket.joinRoom(res.data['chatId'])
     })
   }
 

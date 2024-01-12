@@ -8,14 +8,14 @@ import {MailService} from './class/mail-service.js'
 import {Database} from './class/database.js'
 
 class App{
-    app = express()
-    httpServer = createServer(this.app);
     s = new Socket();
     ms = new MailService();
     db = new Database();
     ep = new Endpoints();
 
     constructor() {
+        this.app = express()
+        this.httpServer = createServer(this.app);
         this.app.use(cors({
           origin: ['https://chat-app-tornike-melikishvili.vercel.app'],
           methods: ['GET,POST'],

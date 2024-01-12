@@ -52,6 +52,9 @@ export class WebSocketService {
     this.socket.emit('registerUser', userId);
   }
 
+  public joinRoom(chatId: string) {
+    this.socket.emit('joinRoom', `chat_${chatId}`);
+  }
   public connect() {
     this.socket.connect()
   }

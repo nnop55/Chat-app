@@ -20,21 +20,27 @@
         />
       </g>
     </svg>
-    <span class="active" *ngIf="activeUsers[sendTo['_id']]"></span>
-    <span class="icon" [style.backgroundColor]="sendTo.bgColor">{{
-      sendTo.email.substring(0, 1) | uppercase
-    }}</span>
+    <span class="icon" [style.backgroundColor]="sendTo.bgColor"
+      >{{ sendTo.email.substring(0, 1) | uppercase }}
+      <span class="active" *ngIf="activeUsers[sendTo['_id']]"></span>
+    </span>
     <h2>{{ sendTo.email }}</h2>
   </div>
   <div class="messages" #messageContainer>
     <ng-container *ngFor="let item of messagesData.messages; let i = index">
       <div class="msg-item {{ item.fromMe ? 'me' : 'ot' }}">
         <ng-container>
-          <span *ngIf="!item.fromMe">{{ item.message }}</span>
+          <span *ngIf="!item.fromMe && item.userId != fromUser">{{
+            item.message
+          }}</span>
           <span *ngIf="item.fromMe">{{ item.message }}</span>
 
           <ng-container
-            *ngIf="isTyping && i == messagesData.messages.length - 1"
+            *ngIf="
+              isTyping &&
+              i == messagesData.messages.length - 1 &&
+              item.userId != fromUser
+            "
           >
             <div class="load-row">
               <span class="ball" [style.background]="sendTo.bgColor"></span>

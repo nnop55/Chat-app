@@ -67,7 +67,6 @@ export class SendMessageComponent {
       this.webSocket.sendMessage(this.sendTo['chatId'], this.fromUser, this.sendTo['_id'], this.messageControl?.value);
       if (!this.messagesData['messages']) this.messagesData['messages'] = []
       this.messagesData['messages'].push({ userId: this.fromUser, message: this.messageControl?.value, fromMe: true })
-      console.log("ASDSAD", this.messagesData)
 
       this.showEmojiPicker = false
       this.scrollToBottom()
