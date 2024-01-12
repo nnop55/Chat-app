@@ -25,6 +25,7 @@ export class WebSocketService {
     });
 
     this.socket.on('updateActiveUsers', (userIds, newUser) => {
+      this.activeUsers = {}
       this.activeUsers = userIds
       newUser && this.shared.updateUsersState(newUser)
     });
