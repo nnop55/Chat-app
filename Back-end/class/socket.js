@@ -41,7 +41,6 @@ export class Socket {
         await this.h.updateMessagesInDb(data);
         if (this.connectedUsers[senderId] && this.connectedUsers[receiverId]) {
           const conversationKey = this.getConversationKey(senderId, receiverId);
-          let fromMe = senderId == cookieUserId
           this.io.to(this.userConversations[conversationKey]).emit('sendMessage', { userId: senderId, message });
         }
       });
