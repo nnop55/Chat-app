@@ -59,11 +59,11 @@ async logOut(req,res){
     const userCollection = this.db.usersCol();
     const objId = new ObjectId(id)
     const user = await userCollection.findOne({ _id:objId });
-  
+    
     if (!user) {
       return res.status(400).json({ message: 'Error' });
     }
-  
+    await this.h.userActiveOrNot(id, false)
     res.status(200).json({ message: 'Log out' });
 }
 

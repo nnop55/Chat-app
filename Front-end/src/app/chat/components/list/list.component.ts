@@ -34,16 +34,7 @@ export class ListComponent implements OnInit {
         }
       })
 
-    this.shared.updateUsers$.subscribe((user) => {
-      if (user) {
-        this.loadingService.setLoadingState(true)
-        let check = this.usersData.find(x => x['_id'] === user['_id'])
-        if (!check) this.usersData.push(user)
-        setTimeout(() => {
-          this.loadingService.setLoadingState(false)
-        }, 500)
-      }
-    })
+
   }
 
 
@@ -57,6 +48,20 @@ export class ListComponent implements OnInit {
     this.api.getAllUsers(this.userId).subscribe((res) => {
       if (res['status'] == "Ok") {
         this.usersData = res['data']
+        this.updateUserList()
+        setTimeout(() => {
+          this.loadingService.setLoadingState(false)
+        }, 500)
+      }
+    })
+  }
+
+  updateUserList() {
+    this.shared.updateUsers$.subscribe((user) => {
+      if (user) {
+        this.loadingService.setLoadingState(true)
+        let check = this.usersData.find(x => x['_id'] === user['_id'])
+        if (!check) this.usersData.push(user)
         setTimeout(() => {
           this.loadingService.setLoadingState(false)
         }, 500)
