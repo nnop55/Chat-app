@@ -3,6 +3,8 @@ import { WebSocketService } from './services/web-socket.service';
 import { ActivatedRoute } from '@angular/router';
 import { LoadingService } from './services/loading.service';
 import { SharedService } from './services/shared.service';
+import { AuthService } from './services/auth.service';
+import { delay } from 'rxjs';
 
 @Component({
   selector: 'app-chat',
@@ -15,19 +17,23 @@ export class ChatComponent implements OnInit, OnDestroy {
   acRoute = inject(ActivatedRoute);
   loadingService = inject(LoadingService);
   shared = inject(SharedService);
+  auth = inject(AuthService)
   content: "auth" | "list" | "messages" = "auth"
   sendTo: any;
   messagesData: any = new Object()
   isLoading: boolean = true
   userId: any
 
-  constructor() {
-    this.userId = sessionStorage.getItem('userId')
-  }
-
   ngOnInit(): void {
     this.loading()
-    this.listener()
+    this.auth.userId$
+      .pipe(delay(500))
+      .subscribe(userId => {
+        if (userId) {
+          this.userId = userId
+          this.listener()
+        }
+      })
   }
 
   @HostListener('window:beforeunload', ['$event'])
@@ -46,16 +52,13 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.webSocket.handleSocketObserver('sendMessage').subscribe((data: any) => {
       if (!this.messagesData['messages']) this.messagesData['messages'] = []
       data['fromMe'] = data.userId == this.userId
-      console.log(data.userId, this.userId)
-      console.log(data)
       this.messagesData['messages'].push(data)
       this.shared.setScrollState('clicked')
     });
 
-    let userActive = sessionStorage.getItem("userId")
-    if (userActive) {
+    if (this.userId) {
       this.content = "list"
-      this.webSocket.onLoad(userActive);
+      this.webSocket.onLoad(this.userId);
     }
   }
 

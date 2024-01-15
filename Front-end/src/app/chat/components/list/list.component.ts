@@ -59,12 +59,8 @@ export class ListComponent implements OnInit {
   updateUserList() {
     this.shared.updateUsers$.subscribe((user) => {
       if (user) {
-        this.loadingService.setLoadingState(true)
         let check = this.usersData.find(x => x['_id'] === user['_id'])
         if (!check) this.usersData.push(user)
-        setTimeout(() => {
-          this.loadingService.setLoadingState(false)
-        }, 500)
       }
     })
   }
