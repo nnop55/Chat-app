@@ -31,10 +31,9 @@ export class ListComponent implements OnInit {
         if (userId) {
           this.userId = userId
           this.getAllUsers()
-          this.updateUserList(true)
         }
       })
-
+    this.updateUserList(true)
 
   }
 
