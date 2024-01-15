@@ -57,9 +57,10 @@ export class ListComponent implements OnInit {
   }
 
   updateUserList(isFirstCall: boolean = false) {
+    isFirstCall && this.loadingService.setLoadingState(true);
+
     this.shared.updateUsers$.subscribe((user) => {
       if (user) {
-        isFirstCall && this.loadingService.setLoadingState(true);
         let check = this.usersData.find(x => x['_id'] === user['_id'])
         if (!check) this.usersData.push(user)
         setTimeout(() => {
