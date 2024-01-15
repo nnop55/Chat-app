@@ -68,13 +68,13 @@ export class Socket {
         }
       });
 
-      socket.on('disconnect', () => {
+      socket.on('disconnect', async () => {
         const userId = Object.keys(this.userSocketMap).find((userId) => this.userSocketMap[userId] === socket.id);
         if(userId) {
           delete this.userSocketMap[userId];
 
           this.removeUserFromConversations(userId);
-
+          await this.h.userActiveOrNot(userId, false)
           console.log(`User ${userId} disconnected`);    
         }
       });
