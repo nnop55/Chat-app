@@ -21,8 +21,11 @@ export class ChatComponent implements OnInit, OnDestroy {
   isLoading: boolean = true
   userId: any
 
-  ngOnInit(): void {
+  constructor() {
     this.userId = sessionStorage.getItem('userId')
+  }
+
+  ngOnInit(): void {
     this.loading()
     this.listener()
   }
@@ -43,6 +46,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.webSocket.handleSocketObserver('sendMessage').subscribe((data: any) => {
       if (!this.messagesData['messages']) this.messagesData['messages'] = []
       data['fromMe'] = data.userId == this.userId
+      console.log(data)
       this.messagesData['messages'].push(data)
       this.shared.setScrollState('clicked')
     });
