@@ -74,6 +74,8 @@ export class Socket {
           delete this.userSocketMap[userId];
 
           this.removeUserFromConversations(userId);
+          delete this.connectedUsers[userId]
+          this.io.emit('updateActiveUsers', this.connectedUsers);
           await this.h.userActiveOrNot(userId, false)
           console.log(`User ${userId} disconnected`);    
         }
