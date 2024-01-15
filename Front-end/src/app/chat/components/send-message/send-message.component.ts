@@ -16,7 +16,7 @@ export class SendMessageComponent {
   showEmojiPicker: boolean = false
   webSocket = inject(WebSocketService);
   shared = inject(SharedService);
-  fromUser!: string | null
+  userId!: string | null
   isTyping: boolean = false
 
   @Input() sendTo: any;
@@ -24,21 +24,20 @@ export class SendMessageComponent {
   @Output() emitClick: EventEmitter<any> = new EventEmitter<any>()
 
   ngOnInit(): void {
-    this.fromUser = sessionStorage.getItem("userId")
+    this.userId = sessionStorage.getItem("userId")
     this.scrollToBottom();
     this.shared.scroll$.subscribe((ev: any) => {
       ev == 'clicked' && this.scrollToBottom()
     })
 
     this.messageControl.valueChanges.subscribe((msg: any) => {
-      this.webSocket.userTyping(this.messagesData['chatId'], this.sendTo['_id'], msg)
+      this.webSocket.userTyping(this.userId, this.sendTo['_id'], msg)
     })
 
     this.webSocket.handleSocketObserver('messageTyping').subscribe((data) => {
-      this.isTyping = data['typing']
+      this.isTyping = data['typing'] && data['userId'] != this.userId
       this.scrollToBottom();
     })
-
   }
 
   handleEmojiSelect(event: any): void {
@@ -55,7 +54,6 @@ export class SendMessageComponent {
       const container = this.messageContainer.nativeElement;
       container.scrollTop = container.scrollHeight;
     }, 10);
-
   }
 
   sendMessage() {
@@ -63,11 +61,9 @@ export class SendMessageComponent {
       return
     }
 
-    if (this.fromUser) {
-      this.webSocket.sendMessage(this.sendTo['chatId'], this.fromUser, this.sendTo['_id'], this.messageControl?.value);
+    if (this.userId) {
+      this.webSocket.sendMessage(this.sendTo['chatId'], this.userId, this.sendTo['_id'], this.messageControl?.value);
       if (!this.messagesData['messages']) this.messagesData['messages'] = []
-      this.messagesData['messages'].push({ userId: this.fromUser, message: this.messageControl?.value, fromMe: true })
-
       this.showEmojiPicker = false
       this.scrollToBottom()
     }
@@ -78,5 +74,4 @@ export class SendMessageComponent {
   back() {
     this.emitClick.emit({ content: 'list' })
   }
-
 }

@@ -19,16 +19,17 @@ export class ChatComponent implements OnInit, OnDestroy {
   sendTo: any;
   messagesData: any = new Object()
   isLoading: boolean = true
+  userId: any
 
   ngOnInit(): void {
+    this.userId = sessionStorage.getItem('userId')
     this.loading()
     this.listener()
   }
 
   @HostListener('window:beforeunload', ['$event'])
   beforeUnloadHandler(event: Event) {
-    let id: any = sessionStorage.getItem('userId')
-    this.webSocket.emitUserInactive(id)
+    this.webSocket.emitUserInactive(this.userId)
     this.webSocket.closeConnection();
   }
 
@@ -39,8 +40,9 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   listener() {
-    this.webSocket.handleSocketObserver('receiveMessage').subscribe((data: any) => {
+    this.webSocket.handleSocketObserver('sendMessage').subscribe((data: any) => {
       if (!this.messagesData['messages']) this.messagesData['messages'] = []
+      data['fromMe'] = data.userId == this.userId
       this.messagesData['messages'].push(data)
       this.shared.setScrollState('clicked')
     });

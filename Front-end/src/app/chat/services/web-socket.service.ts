@@ -14,12 +14,10 @@ export class WebSocketService {
 
   constructor(private shared: SharedService) {
     this.socket = io(environment.socketUrl, {
-      withCredentials: true,
+      withCredentials: true
     });
   }
-
   private setupSocketListeners(): void {
-
     this.socket.on('connect', () => {
       console.log('Connected to WebSocket server');
     });
@@ -45,16 +43,8 @@ export class WebSocketService {
     this.socket.disconnect()
   }
 
-  public setToId(id: string): void {
-    this.socket.emit('setToId', id);
-  }
-
   public registerUser(userId: string): void {
     this.socket.emit('registerUser', userId);
-  }
-
-  public joinRoom(chatId: string) {
-    this.socket.emit('joinRoom', `chat_${chatId}`);
   }
   public connect() {
     this.socket.connect()
@@ -64,8 +54,12 @@ export class WebSocketService {
     this.socket.emit('sendMessage', { chatId, senderId, receiverId, message });
   }
 
-  public userTyping(chatId: string | null, receiverId: string, msg: string) {
-    this.socket.emit("messageTyping", { chatId, receiverId, msg })
+  public userTyping(senderId: string | null, receiverId: string, msg: string) {
+    this.socket.emit("messageTyping", { senderId, receiverId, msg })
+  }
+
+  public startConversation(senderId: string, receiverId: string): void {
+    this.socket.emit('startConversation', { senderId, receiverId });
   }
 
   public handleSocketObserver(event: string): Observable<any> {
