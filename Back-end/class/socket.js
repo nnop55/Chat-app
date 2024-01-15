@@ -12,7 +12,13 @@ export class Socket {
 
   constructor() {
     this.server = createServer();
-    this.io = new Server(this.server);
+    this.io = new Server(this.server,
+          {
+            cors: {
+              origin: 'https://chat-app-tornike-melikishvili.vercel.app',
+              credentials: true,
+            }
+          });
 
     this.ioSet();
   }
